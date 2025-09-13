@@ -16,7 +16,7 @@ docker run -it --mount type=bind,source=/opt/sysroot,target=/opt/sysroot --rm de
   apt-get -o Acquire::Check-Valid-Until=false update && \
   apt-get install -y git && \
   cd /opt && \
-  git clone https://github.com/buzzy/linux.base.git && \
+  git clone https://github.com/ibm-7094a/S330-linux.git && \
   bash"
 h"
 
