@@ -9,7 +9,16 @@ Linux Kernel 3.18 (64bit) + Drivers + Busybox + GCC + glibc + wpa_supplicant (fo
 
 mkdir /opt/sysroot
 
-docker run -it --mount type=bind,source=/opt/sysroot,target=/opt/sysroot --rm debian:buster /bin/bash -c "apt-get update; apt-get install -y git; cd /opt; git clone https://github.com/buzzy/linux.base.git; bash"
+docker run -it --mount type=bind,source=/opt/sysroot,target=/opt/sysroot --rm debian:buster /bin/bash -c "\
+  echo 'deb http://archive.debian.org/debian buster main contrib non-free' > /etc/apt/sources.list && \
+  echo 'deb http://archive.debian.org/debian-security buster/updates main contrib non-free' >> /etc/apt/sources.list && \
+  echo 'deb http://archive.debian.org/debian buster-updates main contrib non-free' >> /etc/apt/sources.list && \
+  apt-get -o Acquire::Check-Valid-Until=false update && \
+  apt-get install -y git && \
+  cd /opt && \
+  git clone https://github.com/buzzy/linux.base.git && \
+  bash"
+h"
 
 time bash linux.base/create.sh
 
