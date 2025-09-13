@@ -99,7 +99,7 @@ rm -rf /opt/sysroot/tmp/*
 
 #BINUTILS
 cd /opt
-wget https://ftp.yzu.edu.tw/gnu/binutils/binutils-2.32.tar.xz
+wget https://ftp.gnu.org/gnu/binutils/binutils-2.32.tar.gz
 tar xfv binutils-2.32.tar.xz
 cd binutils-2.32
 
@@ -126,7 +126,7 @@ make tooldir=/opt/sysroot/usr install
 
 #GCC
 cd /opt
-wget http://ftp.tsukuba.wide.ad.jp/software/gcc/releases/gcc-8.3.0/gcc-8.3.0.tar.xz
+wget https://ftp.gnu.org/gnu/gcc/gcc-8.3.0/gcc-8.3.0.tar.gz
 tar xfv gcc-8.3.0.tar.xz
 cd gcc-8.3.0
 ./contrib/download_prerequisites
