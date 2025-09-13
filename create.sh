@@ -7,7 +7,7 @@ apt-get install -y gcc-8-aarch64-linux-gnu gcc-8-arm-linux-gnueabihf gawk bison 
 
 #CREATE DIR STRUCTURE
 rm -fr /opt/sysroot/*
-cp -rv /opt/linux.base/sysroot/* /opt/sysroot
+cp -rv /opt/S330-linux/sysroot/* /opt/sysroot
 
 #KERNEL:
 cd /opt
@@ -22,8 +22,8 @@ if [ ! -d "/opt/kernel" ]; then
   tar xfv /opt/kernel.tar.gz -C /opt/kernel
 fi
 cd /opt/kernel
-patch -p1 < /opt/linux.base/log2.patch
-cat /opt/linux.base/config.chromeos /opt/linux.base/config.chromeos.extra > .config
+patch -p1 < /opt/S330-linux/log2.patch
+cat /opt/S330-linux/config.chromeos /opt/S330-linux/config.chromeos.extra > .config
 cp include/linux/compiler-gcc5.h include/linux/compiler-gcc8.h
 cp /opt/wireless-regdb/db.txt /opt/kernel/net/wireless
 make oldconfig
@@ -35,12 +35,12 @@ make CFLAGS="-O2 -s" -j$(nproc)
 make INSTALL_MOD_PATH="/opt/sysroot" modules_install
 make INSTALL_DTBS_PATH="/opt/sysroot/boot/dtbs" dtbs_install
 rm -f /opt/sysroot/lib/modules/*/{source,build}
-cp /opt/linux.base/kernel.its .
+cp /opt/S330-linux/kernel.its .
 mkimage -D "-I dts -O dtb -p 2048" -f kernel.its vmlinux.uimg
 dd if=/dev/zero of=bootloader.bin bs=512 count=1
 #echo "console=tty1 init=/sbin/init root=PARTUUID=%U/PARTNROFF=1 rootwait rw noinitrd quiet loglevel=0" > cmdline
 echo "console=tty1 init=/sbin/init root=PARTUUID=%U/PARTNROFF=1 rootwait rw noinitrd" > cmdline
-vbutil_kernel --pack vmlinux.kpart --version 1 --vmlinuz vmlinux.uimg --arch aarch64 --keyblock /opt/linux.base/kernel.keyblock --signprivate /opt/linux.base/kernel_data_key.vbprivk --config cmdline --bootloader bootloader.bin
+vbutil_kernel --pack vmlinux.kpart --version 1 --vmlinuz vmlinux.uimg --arch aarch64 --keyblock /opt/S330-linux/kernel.keyblock --signprivate /opt/S330-linux/kernel_data_key.vbprivk --config cmdline --bootloader bootloader.bin
 cp vmlinux.kpart /opt/sysroot/boot/
 depmod -b /opt/sysroot -F System.map "3.18.0-19095-g86596f58eadf"
 make mrproper
@@ -55,7 +55,7 @@ cd /opt
 wget https://busybox.net/downloads/busybox-1.30.1.tar.bz2
 tar xfv busybox-1.30.1.tar.bz2
 cd busybox-1.30.1
-cp /opt/linux.base/config.busybox .config
+cp /opt/S330-linux/config.busybox .config
 make CFLAGS="-O2 -s" -j$(nproc)
 make install
 
@@ -375,7 +375,7 @@ cd /opt
 wget https://w1.fi/releases/wpa_supplicant-2.8.tar.gz
 tar xfv wpa_supplicant-2.8.tar.gz
 cd wpa_supplicant-2.8/wpa_supplicant
-#cp /opt/linux.base/config.wpa_supplicant .config
+#cp /opt/S330-linux/config.wpa_supplicant .config
 cp defconfig .config
 sed -i '/CONFIG_CTRL_IFACE_DBUS_NEW=y/d' .config
 sed -i '/CONFIG_CTRL_IFACE_DBUS_INTRO=y/d' .config
